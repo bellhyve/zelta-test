@@ -1,0 +1,38 @@
+fatal: destination path 'zelta' already exists and is not an empty directory.
+Already up to date.
+pw: login name `backup' already exists
+match: @2024-01-02_01.22.30		source latest: @2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /ROOT@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /ROOT/default@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /home@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /tmp@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /usr@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /usr/obj@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /usr/ports@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /usr/src@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /var@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /var/audit@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /var/log@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /var/mail@2024-01-02_01.24.15
+match: @2024-01-02_01.22.30		source latest: /var/tmp@2024-01-02_01.24.15
+localsite
+  localhost
+    zroot: ✔ 555K transferred, 14 streams in 1s
+nothing to replicate
+/home/backup/.ssh/id_rsa already exists.
+Overwrite (y/n)? sshd already running?  (pid=1167).
+
+check all features with REPLICATE_NEW:
+mysite
+  127.0.0.1
+    zroot: ✔ 555K transferred, 14 streams in 3s
+
+check all features with DEPTH
+mysite
+  127.0.0.1
+    zroot: ✔ 21K transferred, 6 streams in 3s
+
+Check patterns
+127.0.0.1:zroot: ⊜
+127.0.0.1:zroot: ⊜
+127.0.0.1:zroot: ⊜

@@ -1,0 +1,39 @@
+target does not exist                                                    [4/616]
+target's parent does not exist
+source only snapshot: @2024-01-02_01.17.44
+source only snapshot: /ROOT@2024-01-02_01.17.44
+source only snapshot: /ROOT/default@2024-01-02_01.17.44
+source only snapshot: /home@2024-01-02_01.17.44
+source only snapshot: /tmp@2024-01-02_01.17.44
+source only snapshot: /usr@2024-01-02_01.17.44
+source only snapshot: /usr/obj@2024-01-02_01.17.44
+source only snapshot: /usr/ports@2024-01-02_01.17.44
+source only snapshot: /usr/src@2024-01-02_01.17.44
+source only snapshot: /var@2024-01-02_01.17.44
+source only snapshot: /var/audit@2024-01-02_01.17.44
+source only snapshot: /var/log@2024-01-02_01.17.44
+source only snapshot: /var/mail@2024-01-02_01.17.44
+source only snapshot: /var/tmp@2024-01-02_01.17.44
+localsite
+  localhost
+    zroot: ✔ 3G transferred, 14 streams in 10s
+nothing to replicate
+sshd already running?  (pid=1167).
+Warning: Permanently added '127.0.0.1' (ED25519) to the list of known hosts.
+
+check all features with REPLICATE_NEW:
+mysite
+  127.0.0.1
+    zroot: ✗
+retrying: 127.0.0.1:zroot: ✔ 3G transferred, 28 streams in 61s
+
+check all features with DEPTH
+mysite
+  127.0.0.1
+    zroot: ✗
+retrying: 127.0.0.1:zroot: ✔ 2M transferred, 6 streams in 3s
+
+Check patterns
+127.0.0.1:zroot: ⊜
+127.0.0.1:zroot: ⊜
+127.0.0.1:zroot: ⊜
