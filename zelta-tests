@@ -4,44 +4,54 @@
 # to use to on active environments.
 
 export ZELTA_CONFIG=/tmp/zelta.conf
-SOURCE=zroot	# Local dataset
-TARGET=zelta	# BACKUP_ROOT's parent
+SOURCE=zelta/one	# Local dataset
+TARGET=zelta		# BACKUP_ROOT's parent
 ZELTA=/tmp/zelta
-export PATH=$ZELTA:$PATH
 
-pkg install -y git-lite
-git clone https://github.com/bellhyve/zelta.git
+pkg install -y git-lite >/dev/null 2>&1
+git clone https://github.com/bellhyve/zelta.git $ZELTA >/dev/null 2>&1
 cd $ZELTA
+git checkout dev >/dev/null 2>&1
 git pull
-pw useradd backup -m
-zfs allow -u backup send,snapshot,hold $SOURCE
-zfs allow -u backup receive,mount,create,canmount,mountpoint,setuid,exec,atime,compression $TARGET
+./install.sh
+pw useradd backup -m >/dev/null 2>&1
+
+# Reset:
+#zfs destroy -r zelta ; rm -rf /tmp/zelta*
+
+zfs create -p $SOURCE/two/three/four/five
+zfs create -p $SOURCE/two/six/seven/eight
+find /$SOURCE -type d | xargs -n1 -I% dd if=/dev/urandom of=%/file bs=1M count=1 status=none
 zfs snapshot -r $SOURCE@`date -j +%Y-%m-%d_%H.%M.%S`
 
-# minimal zelta/zpull/zmatch test
+zfs allow -u backup send,snapshot,hold $SOURCE
+zfs allow -u backup receive,mount,create,canmount,mountpoint,setuid,exec,atime,compression $TARGET
+
+# minimal test
 cat > $ZELTA_CONFIG <<EOF
 localsite:
   localhost:
   - $SOURCE: $TARGET/Backups/myhost
 EOF
-su backup -c "$ZELTA/zmatch $SOURCE $TARGET/Backups/myhost"
-su backup -c "$ZELTA/zelta"
-su backup -c "$ZELTA/zpull $SOURCE $TARGET/Backups/myhost"
+su backup -c "zmatch $SOURCE $TARGET/Backups/myhost"
+su backup -c "zelta -n"
+su backup -c "zpull -nv $SOURCE $TARGET/Backups/myhost"
+su backup -c "zelta"
 
-echo n|su backup -c 'ssh-keygen -q -t rsa -N "" -f /home/backup/.ssh/id_rsa'
+echo n|su backup -c 'ssh-keygen -q -t rsa -N "" -f /home/backup/.ssh/id_rsa' >/dev/null 2>&1
 cp -p /home/backup/.ssh/id_rsa.pub /home/backup/.ssh/authorized_keys
 service sshd enable >/dev/null
-service sshd start >/dev/null
+service sshd start >/dev/null 2>&1
 cat /etc/ssh/*.pub >> /home/backup/.ssh/authorized_keys
 su backup -c 'ssh -o StrictHostKeyChecking=no 127.0.0.1 echo'
 
-echo check all features with REPLICATE_NEW:
+echo check all features with REPLICATE:
 # all features enabled
 cat > $ZELTA_CONFIG <<EOF
 BACKUP_ROOT: $TARGET/BackupsReplicate
 RETRY: 5
 INTERMEDIATE: 1
-REPLICATE_NEW: 1
+REPLICATE: 1
 PREFIX: 99
 HOST_PREFIX: 1
 PUSH_TO: 127.0.0.1
@@ -50,16 +60,16 @@ mysite:
   127.0.0.1:
   - $SOURCE
 EOF
-su backup -c "$ZELTA/zelta"
+su backup -c "zelta"
 
 echo
 echo check all features with DEPTH 
-sed -i '' 's/REPLICATE_NEW.*/DEPTH: 2/' $ZELTA_CONFIG
+sed -i '' 's/REPLICATE.*/DEPTH: 2/' $ZELTA_CONFIG
 sed -i '' 's/BackupsReplicate/BackupsDepth/' $ZELTA_CONFIG
-su backup -c "$ZELTA/zelta"
+su backup -c "zelta"
 
 echo 
-echo Check patterns
-su backup -c "$ZELTA/zelta mysite"
-su backup -c "$ZELTA/zelta 127.0.0.1"
-su backup -c "$ZELTA/zelta $SOURCE"
+echo Check patterns and switches
+su backup -c "zelta mysite"
+su backup -c "zelta -v 127.0.0.1"
+su backup -c "zelta -j $SOURCE"

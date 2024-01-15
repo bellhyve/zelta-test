@@ -1,38 +1,84 @@
-fatal: destination path 'zelta' already exists and is not an empty directory.
 Already up to date.
-pw: login name `backup' already exists
-match: @2024-01-02_01.22.30		source latest: @2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /ROOT@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /ROOT/default@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /home@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /tmp@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /usr@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /usr/obj@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /usr/ports@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /usr/src@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /var@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /var/audit@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /var/log@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /var/mail@2024-01-02_01.24.15
-match: @2024-01-02_01.22.30		source latest: /var/tmp@2024-01-02_01.24.15
++ mkdir -vp /usr/local/bin /usr/local/share/zelta
++ install -vm 755 bin/zelta /usr/local/bin
+install: bin/zelta -> /usr/local/bin/zelta
++ cp -vP bin/zmatch bin/zsync bin/zpull /usr/local/bin/
+bin/zmatch -> /usr/local/bin/zmatch
+bin/zsync -> /usr/local/bin/zsync
+bin/zpull -> /usr/local/bin/zpull
++ install -vm 755 share/zelta/zelta-backup.awk share/zelta/zelta-match.awk share/zelta/zelta-reconcile.awk share/zelta/zelta-report.awk share/zelta/zelta-sync.awk /usr/local/share/zelta
+install: share/zelta/zelta-backup.awk -> /usr/local/share/zelta/zelta-backup.awk
+install: share/zelta/zelta-match.awk -> /usr/local/share/zelta/zelta-match.awk
+install: share/zelta/zelta-reconcile.awk -> /usr/local/share/zelta/zelta-reconcile.awk
+install: share/zelta/zelta-report.awk -> /usr/local/share/zelta/zelta-report.awk
+install: share/zelta/zelta-sync.awk -> /usr/local/share/zelta/zelta-sync.awk
+match: @2024-01-15_02.08.42	latest: @2024-01-15_02.09.04
+match: /two@2024-01-15_02.08.42	latest: /two@2024-01-15_02.09.04
+match: /two/six@2024-01-15_02.08.42	latest: /two/six@2024-01-15_02.09.04
+match: /two/six/seven@2024-01-15_02.08.42	latest: /two/six/seven@2024-01-15_02.09.04
+match: /two/six/seven/eight@2024-01-15_02.08.42	latest: /two/six/seven/eight@2024-01-15_02.09.04
+match: /two/three@2024-01-15_02.08.42	latest: /two/three@2024-01-15_02.09.04
+match: /two/three/four@2024-01-15_02.08.42	latest: /two/three/four@2024-01-15_02.09.04
+match: /two/three/four/five@2024-01-15_02.08.42	latest: /two/three/four/five@2024-01-15_02.09.04
+localhost:zelta/one: + zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six/seven@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six/seven/eight@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven/eight'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three/four@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three/four'
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three/four/five@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three/four/five'
+8M sent, 0/8 streams received in 0.08 seconds
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost'
+@2024-01-15_02.08.42::zelta/one@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two'
+@2024-01-15_02.08.42::zelta/one/two@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six'
+@2024-01-15_02.08.42::zelta/one/two/six@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six/seven@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven'
+@2024-01-15_02.08.42::zelta/one/two/six/seven@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/six/seven/eight@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven/eight'
+@2024-01-15_02.08.42::zelta/one/two/six/seven/eight@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three'
+@2024-01-15_02.08.42::zelta/one/two/three@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three/four@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three/four'
+@2024-01-15_02.08.42::zelta/one/two/three/four@2024-01-15_02.09.04: sending 1M
++ zfs send -PLcpn -i '@2024-01-15_02.08.42' 'zelta/one/two/three/four/five@2024-01-15_02.09.04' | zfs receive -vu 'zelta/Backups/myhost/two/three/four/five'
+@2024-01-15_02.08.42::zelta/one/two/three/four/five@2024-01-15_02.09.04: sending 1M
+8M sent, 0/8 streams received in 0.08 seconds
 localsite
   localhost
-    zroot: ✔ 555K transferred, 14 streams in 1s
-nothing to replicate
-/home/backup/.ssh/id_rsa already exists.
-Overwrite (y/n)? sshd already running?  (pid=1167).
+    zelta/one: 8M: ✔ transferred in 0.61s
 
-check all features with REPLICATE_NEW:
+check all features with REPLICATE:
 mysite
   127.0.0.1
-    zroot: ✔ 555K transferred, 14 streams in 3s
+    zelta/one: 8M: ✔ transferred in 1.41s
 
 check all features with DEPTH
 mysite
   127.0.0.1
-    zroot: ✔ 21K transferred, 6 streams in 3s
+    zelta/one: 2M: ✔ transferred in 0.92s
 
-Check patterns
-127.0.0.1:zroot: ⊜
-127.0.0.1:zroot: ⊜
-127.0.0.1:zroot: ⊜
+Check patterns and switches
+127.0.0.1:zelta/one: ⊜
+127.0.0.1:zelta/one: nothing to replicate
+{
+  "startTime": 1705284551,
+  "endTime": 1705284552,
+  "sourceUser": "backup",
+  "sourceHost": 127.0.0.1,
+  "sourceVolume": "zelta/one",
+  "sourceListTime": 0.45,
+  "targetUser": "backup",
+  "targetHost": 127.0.0.1,
+  "targetVolume": "zelta/BackupsDepth/127.0.0.1/zelta/one",
+  "targetListTime": 0.46,
+  "replicationSize": 0,
+  "replicationStreamsSent": null,
+  "replicationStreamsReceived": 0,
+  "replicationErrorCode": 0,
+  "replicationTime": null,
+  "sentStreams": [],
+  "errorMessages": []
+}

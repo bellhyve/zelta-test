@@ -1,39 +1,95 @@
-target does not exist                                                    [4/616]
-target's parent does not exist
-source only snapshot: @2024-01-02_01.17.44
-source only snapshot: /ROOT@2024-01-02_01.17.44
-source only snapshot: /ROOT/default@2024-01-02_01.17.44
-source only snapshot: /home@2024-01-02_01.17.44
-source only snapshot: /tmp@2024-01-02_01.17.44
-source only snapshot: /usr@2024-01-02_01.17.44
-source only snapshot: /usr/obj@2024-01-02_01.17.44
-source only snapshot: /usr/ports@2024-01-02_01.17.44
-source only snapshot: /usr/src@2024-01-02_01.17.44
-source only snapshot: /var@2024-01-02_01.17.44
-source only snapshot: /var/audit@2024-01-02_01.17.44
-source only snapshot: /var/log@2024-01-02_01.17.44
-source only snapshot: /var/mail@2024-01-02_01.17.44
-source only snapshot: /var/tmp@2024-01-02_01.17.44
+Already up to date.
++ mkdir -vp /usr/local/bin /usr/local/share/zelta
++ install -vm 755 bin/zelta /usr/local/bin
+install: bin/zelta -> /usr/local/bin/zelta
++ cp -vP bin/zmatch bin/zsync bin/zpull /usr/local/bin/
+bin/zmatch -> /usr/local/bin/zmatch
+bin/zsync -> /usr/local/bin/zsync
+bin/zpull -> /usr/local/bin/zpull
++ install -vm 755 share/zelta/zelta-backup.awk share/zelta/zelta-match.awk share/zelta/zelta-reconcile.awk share/zelta/zelta-report.awk share/zelta/zelta-sync.awk /usr/local/share/zelta
+install: share/zelta/zelta-backup.awk -> /usr/local/share/zelta/zelta-backup.awk
+install: share/zelta/zelta-match.awk -> /usr/local/share/zelta/zelta-match.awk
+install: share/zelta/zelta-reconcile.awk -> /usr/local/share/zelta/zelta-reconcile.awk
+install: share/zelta/zelta-report.awk -> /usr/local/share/zelta/zelta-report.awk
+install: share/zelta/zelta-sync.awk -> /usr/local/share/zelta/zelta-sync.awk
+parent volume does not exist: zelta/Backups
+snapshots only on source: zelta/one@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/six@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/six/seven@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/six/seven/eight@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/three@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/three/four@2024-01-15_02.08.42
+snapshots only on source: zelta/one/two/three/four/five@2024-01-15_02.08.42
+localhost:zelta/one: + zfs create -up 'zelta/Backups' >/dev/null 2>&1
++ zfs send -PLcpn 'zelta/one@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost'
++ zfs send -PLcpn 'zelta/one/two@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two'
++ zfs send -PLcpn 'zelta/one/two/six@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six'
++ zfs send -PLcpn 'zelta/one/two/six/seven@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven'
++ zfs send -PLcpn 'zelta/one/two/six/seven/eight@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven/eight'
++ zfs send -PLcpn 'zelta/one/two/three@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three'
++ zfs send -PLcpn 'zelta/one/two/three/four@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three/four'
++ zfs send -PLcpn 'zelta/one/two/three/four/five@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three/four/five'
+8M sent, 0/8 streams received in 0 seconds
++ zfs create -up 'zelta/Backups' >/dev/null 2>&1
++ zfs send -PLcpn 'zelta/one@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost'
+zelta/one@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two'
+zelta/one/two@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/six@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six'
+zelta/one/two/six@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/six/seven@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven'
+zelta/one/two/six/seven@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/six/seven/eight@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/six/seven/eight'
+zelta/one/two/six/seven/eight@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/three@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three'
+zelta/one/two/three@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/three/four@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three/four'
+zelta/one/two/three/four@2024-01-15_02.08.42: sending 1M
++ zfs send -PLcpn 'zelta/one/two/three/four/five@2024-01-15_02.08.42' | zfs receive -vu 'zelta/Backups/myhost/two/three/four/five'
+zelta/one/two/three/four/five@2024-01-15_02.08.42: sending 1M
+8M sent, 0/8 streams received in 0.01 seconds
 localsite
   localhost
-    zroot: ✔ 3G transferred, 14 streams in 10s
-nothing to replicate
-sshd already running?  (pid=1167).
-Warning: Permanently added '127.0.0.1' (ED25519) to the list of known hosts.
+    zelta/one: 8M: ✔ transferred in 0.53s
 
-check all features with REPLICATE_NEW:
+check all features with REPLICATE:
 mysite
   127.0.0.1
-    zroot: ✗
-retrying: 127.0.0.1:zroot: ✔ 3G transferred, 28 streams in 61s
+    zelta/one: ✗ error creating parent volume
+error: failed to create dataset: 'zelta/BackupsReplicate/127.0.0.1/zelta'
+retrying: 127.0.0.1:zelta/one: ✗ error creating parent volume
+error: failed to create dataset: 'zelta/BackupsReplicate/127.0.0.1/zelta'
+retrying: 127.0.0.1:zelta/one: 8M: ✔ transferred in 0.87s
 
 check all features with DEPTH
 mysite
   127.0.0.1
-    zroot: ✗
-retrying: 127.0.0.1:zroot: ✔ 2M transferred, 6 streams in 3s
+    zelta/one: ✗ error creating parent volume
+error: failed to create dataset: 'zelta/BackupsDepth/127.0.0.1/zelta'
+retrying: 127.0.0.1:zelta/one: ✗ error creating parent volume
+error: failed to create dataset: 'zelta/BackupsDepth/127.0.0.1/zelta'
+retrying: 127.0.0.1:zelta/one: 2M: ✔ transferred in 0.79s
 
-Check patterns
-127.0.0.1:zroot: ⊜
-127.0.0.1:zroot: ⊜
-127.0.0.1:zroot: ⊜
+Check patterns and switches
+127.0.0.1:zelta/one: ⊜
+127.0.0.1:zelta/one: nothing to replicate
+{
+  "startTime": 1705284534,
+  "endTime": 1705284535,
+  "sourceUser": "backup",
+  "sourceHost": 127.0.0.1,
+  "sourceVolume": "zelta/one",
+  "sourceListTime": 0.32,
+  "targetUser": "backup",
+  "targetHost": 127.0.0.1,
+  "targetVolume": "zelta/BackupsDepth/127.0.0.1/zelta/one",
+  "targetListTime": 0.32,
+  "replicationSize": 0,
+  "replicationStreamsSent": null,
+  "replicationStreamsReceived": 0,
+  "replicationErrorCode": 0,
+  "replicationTime": null,
+  "sentStreams": [],
+  "errorMessages": []
+}

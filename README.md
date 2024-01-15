@@ -2,14 +2,14 @@
 
 For convenience, I’ve provided a vm-bhyve configuration including a blank pool file called “zelta” which you can pipe into “zfs receive” to get you started:
 
-```cat zelta-tests.zfs | zfs receive -v boot/vm/zelta.test```
+```cat zelta-test.zfs | zfs receive -v boot/vm/zelta.test```
 
 (Where boot/vm is vm-bhyve’s VM configuration directory.) The  VM is configured to use the “zroot.img” file, which isn’t included (so I can practice with different OSes). To try with FreeBSD 14, you can do the following. If you use a VM name other than “zelta.test”, be sure to change the VM config file name. 
 
 ```sh
 fetch https://download.freebsd.org/releases/VM-IMAGES/14.0-RELEASE/amd64/Latest/FreeBSD-14.0-RELEASE-amd64-zfs.raw.xz -o - | unxz - > /boot/vm/zelta.test/zroot.img
-vm start zelta.tests
-vm console zelta.tests
+vm start zelta.test
+vm console zelta.test
 ```
 
 Inside the VM:
