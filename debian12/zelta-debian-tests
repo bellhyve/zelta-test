@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Zelta Local Testing Script for Debian (tested on nocloud image)
+#
+# Tested with a fresh VM with network access. This is likely unsafe
+# to use to on active environments.
+
+export ZELTA_ETC=/tmp
+SOURCE=zelta/one        # Test volume
+TARGET=zelta            # BACKUP_ROOT's parent volume
+ZELTA=/tmp/zelta
+PATH=$ZELTA/bin:$PATH
+export ZELTA_SHARE=$ZELTA/share/zelta
+ZELTA_CONFIG=$ZELTA_ETC/zelta.conf
+export AWK=mawk
+
+
+# Reset:
+#zfs destroy -r zelta ; rm -rf /tmp/zelta*
+
+zfs snapshot -r $SOURCE@`date +%Y-%m-%d_%H.%M.%S`
+
+# minimal test
+cat > $ZELTA_CONFIG <<EOF
+localsite:
+  localhost:
+  - $SOURCE: $TARGET/Backups/myhost
+EOF
+su backup -c "zmatch $SOURCE $TARGET/Backups/myhost"
+su backup -c "zp -n"
+su backup -c "zpull -nv $SOURCE $TARGET/Backups/myhost"
+su backup -c "zp"
+
+echo check all features with REPLICATE:
+# all features enabled
+cat > $ZELTA_CONFIG <<EOF
+BACKUP_ROOT: $TARGET/BackupsReplicate
+RETRY: 5
+INTERMEDIATE: 1
+REPLICATE: 1
+DEPTH: 1
+PREFIX: 99
+HOST_PREFIX: 1
+PUSH_TO: 127.0.0.1
+
+mysite:
+  127.0.0.1:
+  - $SOURCE
+EOF
+su backup -c "zp"
+
+echo
+echo check all features with DEPTH 
+sed -i'' 's/REPLICATE.*/REPLICATE: 0/' $ZELTA_CONFIG
+sed -i'' 's/BackupsReplicate/BackupsDepth/' $ZELTA_CONFIG
+su backup -c "zp"
+
+echo 
+echo Check patterns and switches
+su backup -c "zp mysite"
+su backup -c "zp -v 127.0.0.1"
+su backup -c "zp -j $SOURCE"

@@ -1,0 +1,29 @@
+#!/bin/sh -a
+#
+# Zelta Local Testing Script
+#
+# Tested with a fresh VM with network access. This is likely unsafe
+# to use to on active environments.
+
+ZELTA_ETC=/tmp
+SOURCE=zelta/one	# Test volume
+TARGET=zelta		# BACKUP_ROOT's parent volume
+ZELTA=/tmp/zelta
+
+echo 'ZELTA_ETC=/tmp' > "$ZELTA_ETC/zelta.env"
+
+apt install -y git
+git clone https://github.com/bellhyve/zelta.git $ZELTA
+cd $ZELTA
+git checkout dev
+git pull
+
+# Reset:
+#zfs destroy -r zelta ; rm -rf /tmp/zelta*
+
+zfs create -p "$SOURCE/two/three/four/the end"
+zfs create -p "$SOURCE/two/0/seven/eight/nine ten/11"
+find /$SOURCE -type d | xargs -n1 -I% dd if=/dev/urandom of=%/file bs=1M count=1
+
+zfs allow -u backup send,snapshot,hold $SOURCE
+zfs allow -u backup receive,mount,create,canmount,mountpoint,setuid,exec,atime,compression $TARGET
