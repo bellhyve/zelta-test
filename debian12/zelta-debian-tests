@@ -5,14 +5,15 @@
 # Tested with a fresh VM with network access. This is likely unsafe
 # to use to on active environments.
 
-export ZELTA_ETC=/tmp
+#export ZELTA_ETC=/tmp
 SOURCE=zelta/one        # Test volume
 TARGET=zelta            # BACKUP_ROOT's parent volume
-ZELTA=/tmp/zelta
-PATH=$ZELTA/bin:$PATH
-export ZELTA_SHARE=$ZELTA/share/zelta
-ZELTA_CONFIG=$ZELTA_ETC/zelta.conf
-export AWK=mawk
+#ZELTA=/tmp/zelta
+#PATH=$ZELTA/bin:$PATH
+#export ZELTA_SHARE=$ZELTA/share/zelta
+#ZELTA_CONFIG=$ZELTA_ETC/zelta.conf
+ZELTA_CONFIG=/usr/local/etc/zelta/zelta.conf
+#export AWK=mawk
 
 
 # Reset:
