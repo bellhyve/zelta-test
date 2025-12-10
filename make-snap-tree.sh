@@ -14,9 +14,15 @@ etch () {
 
 zfs destroy -vR "$SRCTREE"
 zfs destroy -vR "$TGTTOP"
-zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
-zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
+
+zelta backup apool bpool/treetop/one/two/three
+zelta revert bpool/treetop
+zelta backup bpool/treetop apool/treetop
 zfs create -vsV 16G -o volmode=dev $SRCTREE'/vol1'
+dd if=/dev/urandom of=/tmp/zelta-test-key bs=1m count=512
+
+#zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
+#zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
 for num in `jot 2`; do
 	etch $num
 done
