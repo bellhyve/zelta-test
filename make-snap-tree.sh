@@ -18,6 +18,7 @@ zfs destroy -vR "$TGTTOP"
 zelta backup apool bpool/treetop/one/two/three
 zelta revert bpool/treetop
 zelta backup bpool/treetop apool/treetop
+
 zfs create -vsV 16G -o volmode=dev $SRCTREE'/vol1'
 dd if=/dev/urandom of=/tmp/zelta-test-key bs=1m count=512
 
