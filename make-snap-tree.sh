@@ -12,42 +12,56 @@ etch () {
 	zfs snapshot -r "$SRCTREE"@snap$1
 }
 
-zfs destroy -vR "$SRCTREE"
+# Clean house
+zfs destroy -vR "$SRCTOP"
 zfs destroy -vR "$TGTTOP"
 
-zelta backup apool bpool/treetop/one/two/three
-zelta revert bpool/treetop
-zelta backup bpool/treetop apool/treetop
+# Create the setup tree
+TGTSETUP="$TGTTOP/temp"
+zelta backup "$SRCTOP" "$TGTSETUP"/sub1
+zelta backup "$SRCTOP" "$TGTSETUP"/sub2/orphan
+zelta backup "$SRCTOP" "${TGTSETUP}/sub3/space name"
+zfs create -vsV 16G -o volmode=dev $TGTSETUP'/vol1'
+# TO-DO: Add encrypted dataset
 
-zfs create -vsV 16G -o volmode=dev $SRCTREE'/vol1'
-dd if=/dev/urandom of=/tmp/zelta-test-key bs=1m count=512
+# Sync the temp tree to $SRCTREE
+zelta snapshot "$TGTSETUP"@set
+zelta revert --snap-name "go" "$TGTSETUP"
+zelta backup --snap-name "one" "$TGTSETUP" "$SRCTREE"
+zelta backup --no-snapshot "$SRCTREE" "$TGTTREE"
+# TO-DO: Sync with exclude pattern
+
+
+# Riddle source with special cases
+
+# A child with no snapshot
+zfs create "$SRCTREE"/sub1/child
+
+# An orphan
+zfs destroy "$SRCTREE"/sub2@one
+
+# A diverged target
+zfs snapshot "$TGTTREE/sub3/space name@blocker"
+
+# Incremental source
+zelta snapshot "$SRCTREE"/sub3@two
+
+# Divergent snapshots of the same name
+zelta snapshot "$SRCTREE"/sub2@two
+zelta snapshot "$TGTTREE"/sub2@two
+
+zelta match $SRCTREE "$TGTTREE"
+
+
+#dd if=/dev/urandom of=/tmp/zelta-test-key bs=1m count=512
 
 #zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
 #zfs create -vp $SRCTREE/'minus/two/one/0/lift off'
-for num in `jot 2`; do
-	etch $num
-done
+#for num in `jot 2`; do
+#	etch $num
+#done
+#etch 1; etch 2; etch 3
 
-etch 1; etch 2; etch 3
-
-zelta backup "$SRCTREE" "$TGTTREE"
-
-# Test rotate
-#zfs list -Hroname "$SRCTREE" | tr '\n' '\0' |xargs -t0I% zfs rollback -r %@snap2
-#etch 4
-#zelta sync "$SRCTREE" "$TGTTREE"
-#exit 0
-
-zfs create -p "$SRCTREE/add/7"
-zfs snapshot "$SRCTREE/add/7"@src7
-zfs create -u "$TGTTREE/sub"
-zfs create -u "$TGTTREE/sub/8"
-zfs snapshot "$TGTTREE/sub/8"@tgt8
-zfs snapshot "$SRCTREE/minus/two/one/0"@src7
-zfs snapshot "$TGTTREE/minus/two/one/0"@src7
-zfs snapshot $SRCTREE'/vol1'@snap7
-zfs destroy $SRCTREE'/vol1'@snap6
-zelta match "$SRCTREE" "$TGTTREE"
 #etch 8
 #zelta sync "$SRCTREE" "$TGTTREE"
 #zelta match "$SRCTREE" "$TGTTREE"
