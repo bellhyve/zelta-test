@@ -4,6 +4,7 @@ TGTTOP='bpool'
 SRCTREE="$SRCTOP/treetop"
 TGTTREE="$TGTTOP/backups/treetop"
 
+# Add deterministic data based on snapshot name
 etch () {
 	zfs list -Hro name -t filesystem $SRCTREE | tr '\n' '\0' | xargs -0 -I% -n1 \
 		dd if=/dev/random of='/%/file' bs=64k count=1 > /dev/null 2>&1
@@ -34,14 +35,24 @@ zelta backup --no-snapshot "$SRCTREE" "$TGTTREE"
 
 # Riddle source with special cases
 
-# A child with no snapshot
+# A child with no snapshot on the source
 zfs create "$SRCTREE"/sub1/child
+# A child with no snapshot on the target
+zfs create "$TGTTREE"/sub1/kid
+
+# A written target 
+zfs set readonly=off mountpoint=/$TGTTOP/sub1 "$TGTTREE"/sub1
+zfs mount "$TGTTREE"/sub1
+touch /"$TGTTOP"/sub1/data.file
 
 # An orphan
 zfs destroy "$SRCTREE"/sub2@one
 
 # A diverged target
 zfs snapshot "$TGTTREE/sub3/space name@blocker"
+
+# An unsyncable dataset
+zfs destroy "$TGTTREE"/vol1@go
 
 # Incremental source
 zelta snapshot "$SRCTREE"/sub3@two
