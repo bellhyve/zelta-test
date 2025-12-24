@@ -13,6 +13,7 @@ etch () {
 	zfs snapshot -r "$SRCTREE"@snap$1
 }
 
+set -x
 # Clean house
 zfs destroy -vR "$SRCTOP"
 zfs destroy -vR "$TGTTOP"
@@ -38,12 +39,13 @@ zelta backup --no-snapshot "$SRCTREE" "$TGTTREE"
 # A child with no snapshot on the source
 zfs create "$SRCTREE"/sub1/child
 # A child with no snapshot on the target
-zfs create "$TGTTREE"/sub1/kid
+zfs create -u "$TGTTREE"/sub1/kid
 
 # A written target 
-zfs set readonly=off mountpoint=/$TGTTOP/sub1 "$TGTTREE"/sub1
-zfs mount "$TGTTREE"/sub1
-touch /"$TGTTOP"/sub1/data.file
+#zfs set readonly=off "$TGTTREE"/sub1
+#zfs mount "$TGTTREE"
+#zfs mount "$TGTTREE"/sub1
+#touch /"$TGTTREE"/sub1/data.file
 
 # An orphan
 zfs destroy "$SRCTREE"/sub2@one
@@ -63,6 +65,7 @@ zelta snapshot "$TGTTREE"/sub2@two
 
 zelta match $SRCTREE "$TGTTREE"
 
+set +x
 
 #dd if=/dev/urandom of=/tmp/zelta-test-key bs=1m count=512
 
